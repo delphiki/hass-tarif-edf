@@ -1,0 +1,12 @@
+{
+  "domain": "tarif_edf",
+  "name": "Tarif EDF",
+  "codeowners": [
+    "@delphiki"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/delphiki/hass-tarif-edf",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/delphiki/hass-tarif-edf/issues",
+  "version": "1.0.0"
+}

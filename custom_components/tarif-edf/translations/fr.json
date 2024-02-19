@@ -1,0 +1,30 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "contract_type": "Option",
+                    "contract_power": "Puissance (kVA)"
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "refresh_interval": "Intervalle de mise à jour (en jours)"
+                },
+                "description": "Customize the way the integration works"
+            }
+        }
+    }
+}
