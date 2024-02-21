@@ -32,18 +32,18 @@ async def async_setup_entry(
     sensors = []
     if coordinator.data['contract_type'] == CONTRACT_TYPE_BASE:
         sensors = [
-            TarifEdfSensor(coordinator, 'base_variable_ttc', 'Tarif Base TTC', unit_of_measurement='EUR/kWh'),
+            TarifEdfSensor(coordinator, 'base_variable_ttc', 'Tarif Base TTC', 'EUR/kWh'),
         ]
     elif coordinator.data['contract_type'] == CONTRACT_TYPE_HPHC:
         sensors = [
-            TarifEdfSensor(coordinator, 'hphc_variable_hc_ttc', 'Tarif Heures creuses TTC', unit_of_measurement='EUR/kWh'),
-            TarifEdfSensor(coordinator, 'hphc_variable_hp_ttc', 'Tarif Heures pleines TTC', unit_of_measurement='EUR/kWh'),
+            TarifEdfSensor(coordinator, 'hphc_variable_hc_ttc', 'Tarif Heures creuses TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'hphc_variable_hp_ttc', 'Tarif Heures pleines TTC', 'EUR/kWh'),
         ]
     elif coordinator.data['contract_type'] == CONTRACT_TYPE_TEMPO:
         sensors = [
             TarifEdfSensor(coordinator, 'tempo_couleur', 'Tarif Tempo Couleur'),
-            TarifEdfSensor(coordinator, 'tempo_variable_hc_ttc', 'Tarif Tempo Heures creuses TTC', unit_of_measurement='EUR/kWh'),
-            TarifEdfSensor(coordinator, 'tempo_variable_hp_ttc', 'Tarif Tempo Heures pleines TTC', unit_of_measurement='EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hc_ttc', 'Tarif Tempo Heures creuses TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hp_ttc', 'Tarif Tempo Heures pleines TTC', 'EUR/kWh'),
         ]
 
     async_add_entities(sensors, False)
@@ -51,14 +51,13 @@ async def async_setup_entry(
 class TarifEdfSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Tarif EDF sensor."""
 
-    def __init__(self, coordinator, coordinator_key: str, name: str, state: str = None, unit_of_measurement: str = None) -> None:
+    def __init__(self, coordinator, coordinator_key: str, name: str, unit_of_measurement: str = None) -> None:
         """Initialize the Tarif EDF sensor."""
         super().__init__(coordinator)
         contract_name = str.upper(self.coordinator.data['contract_type']) + " " + self.coordinator.data['contract_power'] + "kVA"
 
         self._coordinator_key = coordinator_key
         self._name = name
-        self._state = state
         self._attr_unique_id = f"tarif_edf_{self._name}"
         self._attr_name = name
         self._attr_device_info = DeviceInfo(
@@ -78,8 +77,6 @@ class TarifEdfSensor(CoordinatorEntity, SensorEntity):
         """Return the state of the sensor."""
         if self.coordinator.data[self._coordinator_key] is None:
             return 'unavailable'
-        elif self._state is not None:
-            return self._state
         else:
             return self.coordinator.data[self._coordinator_key]
 
@@ -87,7 +84,8 @@ class TarifEdfSensor(CoordinatorEntity, SensorEntity):
     def extra_state_attributes(self):
         """Return the state attributes."""
         return {
-            'updated_at': self.coordinator.last_update_success_time
+            'updated_at': self.coordinator.last_update_success_time,
+            'unit_of_measurement': self._attr_unit_of_measurement,
         }
 
     @property
