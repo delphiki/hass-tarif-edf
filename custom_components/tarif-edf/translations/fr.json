@@ -21,7 +21,8 @@
         "step": {
             "init": {
                 "data": {
-                    "refresh_interval": "Intervalle de mise à jour (en jours)"
+                    "refresh_interval": "Intervalle de mise à jour (en jours)",
+                    "off_peak_hours_ranges": "Créneaux heures creuses (HH:MM-HH:MM,HH:MM-HH:MM,...)"
                 },
                 "description": "Customize the way the integration works"
             }

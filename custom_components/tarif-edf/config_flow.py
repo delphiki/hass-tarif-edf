@@ -85,6 +85,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             data_schema=vol.Schema(
                 {
                     vol.Optional("refresh_interval", default=self.config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
+                    vol.Optional("off_peak_hours_ranges", default=self.config_entry.options.get("off_peak_hours_ranges")): str,
                 }
             ),
         )

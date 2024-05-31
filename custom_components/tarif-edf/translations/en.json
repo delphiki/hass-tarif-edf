@@ -21,7 +21,8 @@
         "step": {
             "init": {
                 "data": {
-                    "refresh_interval": "Data refresh interval (in days)"
+                    "refresh_interval": "Data refresh interval (in days)",
+                    "off_peak_hours_ranges": "Off peak hours ranges (HH:MM-HH:MM,HH:MM-HH:MM,...)"
                 },
                 "description": "Customize the way the integration works"
             }
