@@ -1,4 +1,6 @@
 {
   "name": "Tarif EDF for Home Assistant",
   "country": "FR"
+  "render_readme": true,
+  "domains": ["sensor"]
 }
