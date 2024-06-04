@@ -1,12 +1,12 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "L'appareil est déjà configuré"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
+            "cannot_connect": "Échec de connexion",
+            "invalid_auth": "Authentification invalide",
+            "unknown": "Erreur inattendue"
         },
         "step": {
             "user": {
@@ -24,7 +24,7 @@
                     "refresh_interval": "Intervalle de mise à jour (en jours)",
                     "off_peak_hours_ranges": "Créneaux heures creuses (HH:MM-HH:MM,HH:MM-HH:MM,...)"
                 },
-                "description": "Customize the way the integration works"
+                "description": "Personnalisez le fonctionnement de l'intégration"
             }
         }
     }
