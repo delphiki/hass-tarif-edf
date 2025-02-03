@@ -16,18 +16,18 @@ TEMPO_COLOR_API_URL="https://www.api-couleur-tempo.fr/api/jourTempo/today"
 TEMPO_PRICES_DETAILS={
     1: {
         "couleur": "bleu",
-        "hc": 0.1296,
-        "hp": 0.1609
+        "hc": 0.1288,
+        "hp": 0.1552
     },
     2: {
         "couleur": "blanc",
-        "hc": 0.1486,
-        "hp": 0.1894
+        "hc": 0.1447,
+        "hp": 0.1792
     },
     3: {
         "couleur": "rouge",
-        "hc": 0.1568,
-        "hp": 0.7562
+        "hc": 0.1518,
+        "hp": 0.6586
     }
 }
 
