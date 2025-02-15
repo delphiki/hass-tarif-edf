@@ -11,9 +11,12 @@ CONTRACT_TYPE_TEMPO="tempo"
 TARIF_BASE_URL="https://www.data.gouv.fr/fr/datasets/r/c13d05e5-9e55-4d03-bf7e-042a2ade7e49"
 TARIF_HPHC_URL="https://www.data.gouv.fr/fr/datasets/r/f7303b3a-93c7-4242-813d-84919034c416"
 
-TEMPO_COLOR_API_URL="https://www.api-couleur-tempo.fr/api/jourTempo/today"
+TEMPO_COLOR_API_URL="https://www.api-couleur-tempo.fr/api/jourTempo"
 
 TEMPO_PRICES_DETAILS={
+    0: {
+        "couleur": "indéterminé",
+    },
     1: {
         "couleur": "bleu",
         "hc": 0.1288,
@@ -30,6 +33,9 @@ TEMPO_PRICES_DETAILS={
         "hp": 0.6586
     }
 }
+TEMPO_DAY_START_AT="06:00"
+TEMPO_TOMRROW_AVAILABLE_AT="11:00"
+TEMPO_OFFPEAK_HOURS="22:00-06:00"
 
 DEFAULT_REFRESH_INTERVAL=1
 

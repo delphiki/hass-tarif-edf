@@ -18,6 +18,7 @@ from .const import (
     CONTRACT_TYPE_BASE,
     CONTRACT_TYPE_HPHC,
     CONTRACT_TYPE_TEMPO,
+    TEMPO_OFFPEAK_HOURS
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -80,12 +81,16 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
+        default_offpeak_hours = None
+        if self.config_entry.data['contract_type'] == CONTRACT_TYPE_TEMPO:
+            default_offpeak_hours = TEMPO_OFFPEAK_HOURS
+
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
                     vol.Optional("refresh_interval", default=self.config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
-                    vol.Optional("off_peak_hours_ranges", default=self.config_entry.options.get("off_peak_hours_ranges")): str,
+                    vol.Optional("off_peak_hours_ranges", default=self.config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
                 }
             ),
         )
