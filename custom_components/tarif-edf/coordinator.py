@@ -25,7 +25,8 @@ from .const import (
     TEMPO_COLOR_API_URL,
     TEMPO_PRICES_DETAILS,
     TEMPO_DAY_START_AT,
-    TEMPO_TOMRROW_AVAILABLE_AT
+    TEMPO_TOMRROW_AVAILABLE_AT,
+    TEMPO_OFFPEAK_HOURS
 )
 
 _LOGGER = logging.getLogger(__name__)
