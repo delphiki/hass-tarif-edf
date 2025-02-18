@@ -31,20 +31,29 @@ async def async_setup_entry(
 
     sensors = []
     if coordinator.data['contract_type'] == CONTRACT_TYPE_BASE:
-        sensors = [
+        sensors.extend([
             TarifEdfSensor(coordinator, 'base_variable_ttc', 'Tarif Base TTC', 'EUR/kWh'),
-        ]
+        ])
     elif coordinator.data['contract_type'] == CONTRACT_TYPE_HPHC:
-        sensors = [
+        sensors.extend([
             TarifEdfSensor(coordinator, 'hphc_variable_hc_ttc', 'Tarif Heures creuses TTC', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'hphc_variable_hp_ttc', 'Tarif Heures pleines TTC', 'EUR/kWh'),
-        ]
+        ])
     elif coordinator.data['contract_type'] == CONTRACT_TYPE_TEMPO:
-        sensors = [
+        sensors.extend([
             TarifEdfSensor(coordinator, 'tempo_couleur', 'Tarif Tempo Couleur'),
+            TarifEdfSensor(coordinator, 'tempo_couleur_hier', 'Tarif Tempo Couleur Hier'),
+            TarifEdfSensor(coordinator, 'tempo_couleur_aujourdhui', "Tarif Tempo Couleur Aujourd'hui"),
+            TarifEdfSensor(coordinator, 'tempo_couleur_demain', 'Tarif Tempo Couleur Demain'),
             TarifEdfSensor(coordinator, 'tempo_variable_hc_ttc', 'Tarif Tempo Heures creuses TTC', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'tempo_variable_hp_ttc', 'Tarif Tempo Heures pleines TTC', 'EUR/kWh'),
-        ]
+            TarifEdfSensor(coordinator, 'tempo_variable_hc_bleu_ttc', 'Tarif Bleu Tempo Heures creuses TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hp_bleu_ttc', 'Tarif Bleu Tempo Heures pleines TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hc_rouge_ttc', 'Tarif Rouge Tempo Heures creuses TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hp_rouge_ttc', 'Tarif Rouge Tempo Heures pleines TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hc_blanc_ttc', 'Tarif Blanc Tempo Heures creuses TTC', 'EUR/kWh'),
+            TarifEdfSensor(coordinator, 'tempo_variable_hp_blanc_ttc', 'Tarif Blanc Tempo Heures pleines TTC', 'EUR/kWh'),
+        ])
 
     if coordinator.data['tarif_actuel_ttc'] is not None:
         sensors.append(
