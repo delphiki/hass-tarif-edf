@@ -26,7 +26,7 @@ _LOGGER = logging.getLogger(__name__)
 STEP_USER = vol.Schema(
     {
         vol.Required("contract_power", default="6"): SelectSelector({
-            "options": ['3', '6', '9', '12', '15'],
+            "options": ['3', '6', '9', '12', '15', '18', '30', '36'],
             "mode": "dropdown"
         }),
         vol.Required("contract_type"): vol.In({
