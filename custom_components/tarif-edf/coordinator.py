@@ -22,8 +22,9 @@ from .const import (
     CONTRACT_TYPE_TEMPO,
     TARIF_BASE_URL,
     TARIF_HPHC_URL,
+    TARIF_TEMPO_URL,
     TEMPO_COLOR_API_URL,
-    TEMPO_PRICES_DETAILS,
+    TEMPO_COLORS_MAPPING,
     TEMPO_DAY_START_AT,
     TEMPO_TOMRROW_AVAILABLE_AT,
     TEMPO_OFFPEAK_HOURS
@@ -45,7 +46,7 @@ def time_in_between(now, start, end):
         return start <= now or now < end
 
 def get_tempo_color_from_code(code):
-    return TEMPO_PRICES_DETAILS[code]['couleur']
+    return TEMPO_COLORS_MAPPING[code]
 
 
 class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
@@ -104,11 +105,13 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
 
         self.logger.info('EDF tarif_needs_update '+('yes' if tarif_needs_update else 'no'))
 
-        if tarif_needs_update and data['contract_type'] in [CONTRACT_TYPE_BASE, CONTRACT_TYPE_HPHC]:
+        if tarif_needs_update:
             if data['contract_type'] == CONTRACT_TYPE_BASE:
                 url = TARIF_BASE_URL
             elif data['contract_type'] == CONTRACT_TYPE_HPHC:
-                url = TARIF_HPHC_URL
+                    url = TARIF_HPHC_URL
+            elif data['contract_type'] == CONTRACT_TYPE_TEMPO:
+                    url = TARIF_TEMPO_URL
 
             response = await self.hass.async_add_executor_job(get_remote_file, url)
             parsed_content = csv.reader(response.content.decode('utf-8').splitlines(), delimiter=';')
@@ -123,11 +126,21 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
                         self.data['hphc_fixe_ttc'] = float(row[4].replace(",", "." ))
                         self.data['hphc_variable_hc_ttc'] = float(row[6].replace(",", "." ))
                         self.data['hphc_variable_hp_ttc'] = float(row[8].replace(",", "." ))
+                    elif data['contract_type'] == CONTRACT_TYPE_TEMPO:
+                        self.data['tempo_fixe_ttc'] = float(row[4].replace(",", "." ))
+                        self.data['tempo_variable_hc_bleu_ttc'] = float(row[6].replace(",", "." ))
+                        self.data['tempo_variable_hp_bleu_ttc'] = float(row[8].replace(",", "." ))
+                        self.data['tempo_variable_hc_blanc_ttc'] = float(row[10].replace(",", "." ))
+                        self.data['tempo_variable_hp_blanc_ttc'] = float(row[12].replace(",", "." ))
+                        self.data['tempo_variable_hc_rouge_ttc'] = float(row[14].replace(",", "." ))
+                        self.data['tempo_variable_hp_rouge_ttc'] = float(row[16].replace(",", "." ))
+
                     self.data['last_refresh_at'] = datetime.now()
 
                     break
             response.close
-        elif data['contract_type'] == CONTRACT_TYPE_TEMPO:
+
+        if data['contract_type'] == CONTRACT_TYPE_TEMPO:
             today = date.today()
             yesterday = today - timedelta(days=1)
             tomorrow = today + timedelta(days=1)
@@ -153,9 +166,10 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
                 self.logger.info("Using yesterday's tempo prices")
 
             if currentColorCode in [1, 2, 3]:
-                self.data['tempo_couleur'] = TEMPO_PRICES_DETAILS[currentColorCode]['couleur']
-                self.data['tempo_variable_hp_ttc'] = TEMPO_PRICES_DETAILS[currentColorCode]['hp']
-                self.data['tempo_variable_hc_ttc'] = TEMPO_PRICES_DETAILS[currentColorCode]['hc']
+                color = get_tempo_color_from_code(currentColorCode)
+                self.data['tempo_couleur'] = color
+                self.data['tempo_variable_hp_ttc'] = self.data[f"tempo_variable_hp_{color}_ttc"]
+                self.data['tempo_variable_hc_ttc'] = self.data[f"tempo_variable_hc_{color}_ttc"]
                 self.data['last_refresh_at'] = datetime.now()
 
         default_offpeak_hours = None
