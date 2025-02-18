@@ -57,7 +57,7 @@ async def async_setup_entry(
 
     if coordinator.data['tarif_actuel_ttc'] is not None:
         sensors.append(
-            TarifEdfSensor(coordinator, 'tarif_actuel_ttc', 'Tarif actuel TTC', 'EUR/kWh')
+            TarifEdfSensor(coordinator, 'tarif_actuel_ttc', f"Tarif actuel {coordinator.data['contract_type']} {coordinator.data['contract_power']}kWh TTC", 'EUR/kWh')
         )
 
     async_add_entities(sensors, False)
