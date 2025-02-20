@@ -1,6 +1,6 @@
 {
   "name": "Tarif EDF",
-  "country": "FR"
+  "country": "FR",
   "render_readme": true,
   "domains": ["sensor"]
 }
