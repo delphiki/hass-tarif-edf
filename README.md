@@ -19,8 +19,7 @@ Copy the `tarif_edf` folder from latest release to the `custom_components` folde
 ### Common Sensors (All Contracts)
 | Sensor | Description | Unit | Example |
 |--------|-------------|------|---------|
-| `sensor.puissance_souscrite_[type]_[power]kwh_ttc` | Subscribed power level | kWh | `sensor.puissance_souscrite_tempo_15kwh_ttc` |
-| `sensor.tarif_actuel_[type]_[power]kwh_ttc` | Current applicable rate | EUR/kWh | `sensor.tarif_actuel_base_6kwh_ttc` |
+| `sensor.tarif_actuel_[type]_[power]kva_ttc` | Current applicable rate | EUR/kWh | `sensor.tarif_actuel_base_6kva_ttc` |
 
 ### Base Contract
 | Sensor | Description | Unit |
