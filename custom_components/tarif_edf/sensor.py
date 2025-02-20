@@ -29,7 +29,10 @@ async def async_setup_entry(
         config_entry.entry_id
     ]["coordinator"]
 
-    sensors = []
+    sensors = [
+        TarifEdfSensor(coordinator, 'contract_power', f"Puissance souscrite {coordinator.data['contract_type']} {coordinator.data['contract_power']}kVA", 'kVA'),
+    ]
+
     if coordinator.data['contract_type'] == CONTRACT_TYPE_BASE:
         sensors.extend([
             TarifEdfSensor(coordinator, 'base_variable_ttc', 'Tarif Base TTC', 'EUR/kWh'),
