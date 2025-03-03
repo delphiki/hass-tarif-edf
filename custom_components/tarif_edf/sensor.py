@@ -35,15 +35,15 @@ async def async_setup_entry(
 
     if coordinator.data['contract_type'] == CONTRACT_TYPE_BASE:
         sensors.extend([
-            TarifEdfSensor(coordinator, 'base_fixe_ttc', 'Tarif Base Fixe TTC', 'EUR/mois'),
-            TarifEdfSensor(coordinator, 'base_fixe_ht', 'Tarif Base Fixe HT', 'EUR/mois'),
+            TarifEdfSensor(coordinator, 'base_fixe_ttc', 'Tarif Base Fixe TTC', 'EUR/an'),
+            TarifEdfSensor(coordinator, 'base_fixe_ht', 'Tarif Base Fixe HT', 'EUR/an'),
             TarifEdfSensor(coordinator, 'base_variable_ttc', 'Tarif Base Variable TTC', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'base_variable_ht', 'Tarif Base Variable HT', 'EUR/kWh'),
         ])
     elif coordinator.data['contract_type'] == CONTRACT_TYPE_HPHC:
         sensors.extend([
-            TarifEdfSensor(coordinator, 'hphc_fixe_ttc', 'Tarif HPHC Fixe TTC', 'EUR/mois'),
-            TarifEdfSensor(coordinator, 'hphc_fixe_ht', 'Tarif HPHC Fixe HT', 'EUR/mois'),
+            TarifEdfSensor(coordinator, 'hphc_fixe_ttc', 'Tarif HPHC Fixe TTC', 'EUR/an'),
+            TarifEdfSensor(coordinator, 'hphc_fixe_ht', 'Tarif HPHC Fixe HT', 'EUR/an'),
             TarifEdfSensor(coordinator, 'hphc_variable_hc_ttc', 'Tarif HPHC Heures Creuses TTC', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'hphc_variable_hc_ht', 'Tarif HPHC Heures Creuses HT', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'hphc_variable_hp_ttc', 'Tarif HPHC Heures Pleines TTC', 'EUR/kWh'),
@@ -51,8 +51,8 @@ async def async_setup_entry(
         ])
     elif coordinator.data['contract_type'] == CONTRACT_TYPE_TEMPO:
         sensors.extend([
-            TarifEdfSensor(coordinator, 'tempo_fixe_ttc', 'Tarif Tempo Fixe TTC', 'EUR/mois'),
-            TarifEdfSensor(coordinator, 'tempo_fixe_ht', 'Tarif Tempo Fixe HT', 'EUR/mois'),
+            TarifEdfSensor(coordinator, 'tempo_fixe_ttc', 'Tarif Tempo Fixe TTC', 'EUR/an'),
+            TarifEdfSensor(coordinator, 'tempo_fixe_ht', 'Tarif Tempo Fixe HT', 'EUR/an'),
             TarifEdfSensor(coordinator, 'tempo_variable_hc_bleu_ttc', 'Tarif Bleu Tempo Heures Creuses TTC', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'tempo_variable_hc_bleu_ht', 'Tarif Bleu Tempo Heures Creuses HT', 'EUR/kWh'),
             TarifEdfSensor(coordinator, 'tempo_variable_hp_bleu_ttc', 'Tarif Bleu Tempo Heures Pleines TTC', 'EUR/kWh'),
