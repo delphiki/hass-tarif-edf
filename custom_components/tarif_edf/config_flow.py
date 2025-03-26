@@ -60,7 +60,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:
         """Create the options flow."""
-        return OptionsFlowHandler(config_entry)
+        return OptionsFlowHandler(config_entry.entry_id)
 
 class CannotConnect(HomeAssistantError):
     """Error to indicate we cannot connect."""
@@ -70,9 +70,9 @@ class InvalidAuth(HomeAssistantError):
     """Error to indicate there is invalid auth."""
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+    def __init__(self, config_entry_id: str) -> None:
         """Initialize options flow."""
-        self.config_entry = config_entry
+        self.config_entry_id = config_entry_id
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -81,16 +81,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
+        config_entry = self.hass.config_entries.async_get_entry(self.config_entry_id)
+
         default_offpeak_hours = None
-        if self.config_entry.data['contract_type'] == CONTRACT_TYPE_TEMPO:
+        if config_entry.data['contract_type'] == CONTRACT_TYPE_TEMPO:
             default_offpeak_hours = TEMPO_OFFPEAK_HOURS
 
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
-                    vol.Optional("refresh_interval", default=self.config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
-                    vol.Optional("off_peak_hours_ranges", default=self.config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
+                    vol.Optional("refresh_interval", default=config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
+                    vol.Optional("off_peak_hours_ranges", default=config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
                 }
             ),
         )
