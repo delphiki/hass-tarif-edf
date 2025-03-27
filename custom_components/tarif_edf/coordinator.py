@@ -33,8 +33,13 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 def get_remote_file(url: str):
-    response = requests.get(url, stream = True)
-    return response
+    return requests.get(
+        url,
+        stream=True,
+        headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
+        },
+    )
 
 def str_to_time(str):
     return datetime.strptime(str, '%H:%M').time()
