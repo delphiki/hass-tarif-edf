@@ -1,5 +1,7 @@
 {
   "name": "Tarif EDF",
   "country": "FR",
-  "render_readme": true
+  "render_readme": true,
+  "zip_release": true,
+  "filename": "tarif_edf.zip"
 }
