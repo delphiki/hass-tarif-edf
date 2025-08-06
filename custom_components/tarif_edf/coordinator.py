@@ -121,18 +121,19 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
             response = await self.hass.async_add_executor_job(get_remote_file, url)
             parsed_content = csv.reader(response.content.decode('utf-8').splitlines(), delimiter=';')
             rows = list(parsed_content)
+            today = date.today()
 
-            for row in rows:
-                if row[1] == '' and row[2] == data['contract_power']:
+            for row in reversed(rows): #On part de la fin
+                if row[0] != "" and today >= datetime.strptime(row[0], "%d/%m/%Y").date() and row[2] == data['contract_power']:
                     if data['contract_type'] == CONTRACT_TYPE_BASE:
-                        self.data['base_fixe_ttc'] = float(row[4].replace(",", "." ))
+                        self.data['base_fixe_ttc'] = float(row[4].replace(",", "." )) /12
                         self.data['base_variable_ttc'] = float(row[6].replace(",", "." ))
-                    elif data['contract_type'] == CONTRACT_TYPE_HPHC:
-                        self.data['hphc_fixe_ttc'] = float(row[4].replace(",", "." ))
+                    elif data['contract_type'] == CONTRACT_TYPE_HPHC: 
+                        self.data['hphc_fixe_ttc'] = float(row[4].replace(",", "." )) /12
                         self.data['hphc_variable_hc_ttc'] = float(row[6].replace(",", "." ))
                         self.data['hphc_variable_hp_ttc'] = float(row[8].replace(",", "." ))
                     elif data['contract_type'] == CONTRACT_TYPE_TEMPO:
-                        self.data['tempo_fixe_ttc'] = float(row[4].replace(",", "." ))
+                        self.data['tempo_fixe_ttc'] = float(row[4].replace(",", "." )) /12
                         self.data['tempo_variable_hc_bleu_ttc'] = float(row[6].replace(",", "." ))
                         self.data['tempo_variable_hp_bleu_ttc'] = float(row[8].replace(",", "." ))
                         self.data['tempo_variable_hc_blanc_ttc'] = float(row[10].replace(",", "." ))
