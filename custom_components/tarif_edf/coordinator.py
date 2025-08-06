@@ -124,7 +124,7 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
             today = date.today()
 
             for row in reversed(rows): #On part de la fin
-                if today >= datetime.strptime(row[0], "%d/%m/%Y").date() and row[2] == data['contract_power']:
+                if row[0] != "" and today >= datetime.strptime(row[0], "%d/%m/%Y").date() and row[2] == data['contract_power']:
                     if data['contract_type'] == CONTRACT_TYPE_BASE:
                         self.data['base_fixe_ttc'] = float(row[4].replace(",", "." )) /12
                         self.data['base_variable_ttc'] = float(row[6].replace(",", "." ))
