@@ -8,5 +8,9 @@
   "documentation": "https://github.com/delphiki/hass-tarif-edf",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/delphiki/hass-tarif-edf/issues",
-  "version": "2.0.1"
+  "requirements": [
+    "aiohttp>=3.8.0",
+    "async_timeout>=4.0.0"
+  ],
+  "version": "3.0.0"
 }

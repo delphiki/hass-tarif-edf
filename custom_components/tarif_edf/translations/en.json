@@ -12,7 +12,7 @@
             "user": {
                 "data": {
                     "contract_type": "Option",
-                    "power": "Power (kVA)"
+                    "contract_power": "Power (kVA)"
                 }
             }
         }
