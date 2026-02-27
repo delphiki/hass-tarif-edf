@@ -1,4 +1,5 @@
 """The Tarif EDF integration."""
+
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
@@ -9,11 +10,8 @@ from datetime import timedelta
 
 from .coordinator import TarifEdfDataUpdateCoordinator
 
-from .const import (
-    DOMAIN,
-    PLATFORMS,
-    DEFAULT_REFRESH_INTERVAL
-)
+from .const import DOMAIN, PLATFORMS, DEFAULT_REFRESH_INTERVAL
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Tarif EDF from a config entry."""
@@ -44,8 +42,9 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     return unload_ok
 
-async def update_listener(hass: HomeAssistant, entry: ConfigEntry):
-    """Handle options update."""
-    hass.data[DOMAIN][entry.entry_id]['coordinator'].update_interval = timedelta(days=entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL))
 
-    return True
+async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Handle options update."""
+    coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    refresh_interval = entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)
+    coordinator.update_interval = timedelta(days=refresh_interval)

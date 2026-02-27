@@ -9,10 +9,21 @@
             "unknown": "Unexpected error"
         },
         "step": {
-            "user": {
+            "contract": {
                 "data": {
-                    "contract_type": "Option",
-                    "power": "Power (kVA)"
+                    "contract_type": "Contract type"
+                }
+            },
+            "power": {
+                "data": {
+                    "contract_power": "Power (kVA)"
+                }
+            },
+            "offpeak_hours": {
+                "title": "Off-peak hours",
+                "description": "Enter your off-peak hours as shown on your electricity bill. Use format HH:MM-HH:MM. For multiple periods, separate with commas.\n\nExamples:\n- 22:30-06:30 (single period overnight)\n- 01:30-07:30,12:30-14:30 (two periods)",
+                "data": {
+                    "off_peak_hours_ranges": "Off-peak hours"
                 }
             }
         }

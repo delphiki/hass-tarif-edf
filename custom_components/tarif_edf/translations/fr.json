@@ -9,10 +9,21 @@
             "unknown": "Erreur inattendue"
         },
         "step": {
-            "user": {
+            "contract": {
                 "data": {
-                    "contract_type": "Option",
+                    "contract_type": "Type de contrat"
+                }
+            },
+            "power": {
+                "data": {
                     "contract_power": "Puissance (kVA)"
+                }
+            },
+            "offpeak_hours": {
+                "title": "Heures creuses",
+                "description": "Saisissez vos heures creuses telles qu'indiquées sur votre facture d'électricité. Utilisez le format HH:MM-HH:MM. Pour plusieurs plages, séparez par des virgules.\n\nExemples :\n- 22:30-06:30 (une plage de nuit)\n- 01:30-07:30,12:30-14:30 (deux plages)",
+                "data": {
+                    "off_peak_hours_ranges": "Heures creuses"
                 }
             }
         }
