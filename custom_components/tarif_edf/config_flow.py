@@ -87,12 +87,18 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if config_entry.data['contract_type'] == CONTRACT_TYPE_TEMPO:
             default_offpeak_hours = TEMPO_OFFPEAK_HOURS
 
+        options_schema = {
+            vol.Optional("refresh_interval", default=config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
+            vol.Optional("off_peak_hours_ranges", default=config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
+        }
+
+        if config_entry.data['contract_type'] == CONTRACT_TYPE_BASE:
+            options_schema[vol.Optional("tarif_base_override", default=config_entry.options.get("tarif_base_override", ""))] = str
+        elif config_entry.data['contract_type'] == CONTRACT_TYPE_HPHC:
+            options_schema[vol.Optional("tarif_hp_override", default=config_entry.options.get("tarif_hp_override", ""))] = str
+            options_schema[vol.Optional("tarif_hc_override", default=config_entry.options.get("tarif_hc_override", ""))] = str
+
         return self.async_show_form(
             step_id="init",
-            data_schema=vol.Schema(
-                {
-                    vol.Optional("refresh_interval", default=config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
-                    vol.Optional("off_peak_hours_ranges", default=config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
-                }
-            ),
+            data_schema=vol.Schema(options_schema),
         )

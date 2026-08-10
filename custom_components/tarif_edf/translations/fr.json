@@ -22,7 +22,10 @@
             "init": {
                 "data": {
                     "refresh_interval": "Intervalle de mise à jour (en jours)",
-                    "off_peak_hours_ranges": "Créneaux heures creuses (HH:MM-HH:MM,HH:MM-HH:MM,...)"
+                    "off_peak_hours_ranges": "Créneaux heures creuses (HH:MM-HH:MM,HH:MM-HH:MM,...)",
+                    "tarif_hp_override": "Tarif HP personnalisé (EUR TTC/kWh, ex. 0,2142) - vide = source data.gouv.fr",
+                    "tarif_hc_override": "Tarif HC personnalisé (EUR TTC/kWh, ex. 0,1589) - vide = source data.gouv.fr",
+                    "tarif_base_override": "Tarif base personnalisé (EUR TTC/kWh, ex. 0,2001) - vide = source data.gouv.fr"
                 },
                 "description": "Personnalisez le fonctionnement de l'intégration"
             }

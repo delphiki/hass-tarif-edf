@@ -145,6 +145,18 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
                     break
             response.close
 
+            # Apply manual tariff overrides (workaround when the data.gouv.fr
+            # dataset is not up to date with the latest official EDF grid)
+            opt = self.config_entry.options
+            if data['contract_type'] == CONTRACT_TYPE_BASE:
+                if opt.get("tarif_base_override"):
+                    self.data['base_variable_ttc'] = float(opt["tarif_base_override"].replace(",", "."))
+            elif data['contract_type'] == CONTRACT_TYPE_HPHC:
+                if opt.get("tarif_hp_override"):
+                    self.data['hphc_variable_hp_ttc'] = float(opt["tarif_hp_override"].replace(",", "."))
+                if opt.get("tarif_hc_override"):
+                    self.data['hphc_variable_hc_ttc'] = float(opt["tarif_hc_override"].replace(",", "."))
+
         if data['contract_type'] == CONTRACT_TYPE_TEMPO:
             today = date.today()
             yesterday = today - timedelta(days=1)
