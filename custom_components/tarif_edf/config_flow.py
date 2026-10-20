@@ -93,6 +93,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                 {
                     vol.Optional("refresh_interval", default=config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
                     vol.Optional("off_peak_hours_ranges", default=config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
+                    vol.Optional("autoproducteur_injection", default=config_entry.options.get("autoproducteur_injection", False)): bool,
                 }
             ),
         )

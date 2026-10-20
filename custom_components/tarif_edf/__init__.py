@@ -4,6 +4,7 @@ from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers.storage import Store
 
 from datetime import timedelta
 
@@ -12,7 +13,9 @@ from .coordinator import TarifEdfDataUpdateCoordinator
 from .const import (
     DOMAIN,
     PLATFORMS,
-    DEFAULT_REFRESH_INTERVAL
+    DEFAULT_REFRESH_INTERVAL,
+    STORAGE_VERSION,
+    STORAGE_KEY,
 )
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -43,6 +46,13 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Handle removal of an entry - clean up stored data."""
+    store = Store(hass, STORAGE_VERSION, f"{STORAGE_KEY}_{entry.entry_id}")
+    await store.async_remove()
+
 
 async def update_listener(hass: HomeAssistant, entry: ConfigEntry):
     """Handle options update."""
