@@ -13,23 +13,27 @@ from homeassistant.core import callback
 from homeassistant.helpers.selector import SelectSelector
 
 from .const import (
+    CONF_CONTRACT_POWER,
+    CONF_CONTRACT_TYPE,
+    CONF_OFF_PEAK_HOURS_RANGES,
+    CONF_REFRESH_INTERVAL,
     DOMAIN,
     DEFAULT_REFRESH_INTERVAL,
     CONTRACT_TYPE_BASE,
     CONTRACT_TYPE_HPHC,
     CONTRACT_TYPE_TEMPO,
-    TEMPO_OFFPEAK_HOURS
+    TEMPO_OFFPEAK_HOURS,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
 STEP_USER = vol.Schema(
     {
-        vol.Required("contract_power", default="6"): SelectSelector({
+        vol.Required(CONF_CONTRACT_POWER, default="6"): SelectSelector({
             "options": ['3', '6', '9', '12', '15', '18', '30', '36'],
             "mode": "dropdown"
         }),
-        vol.Required("contract_type"): vol.In({
+        vol.Required(CONF_CONTRACT_TYPE): vol.In({
             CONTRACT_TYPE_BASE: 'Base',
             CONTRACT_TYPE_HPHC: 'Heures pleines / Heures creuses',
             CONTRACT_TYPE_TEMPO: 'Tempo',
@@ -52,7 +56,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 step_id="user", data_schema=STEP_USER
             )
 
-        return self.async_create_entry(title="Option "+str.upper(user_input['contract_type']) + ", " + user_input['contract_power']+"kVA", data=user_input)
+        return self.async_create_entry(title="Option "+str.upper(user_input[CONF_CONTRACT_TYPE]) + ", " + user_input[CONF_CONTRACT_POWER]+"kVA", data=user_input)
 
     @staticmethod
     @callback
@@ -84,15 +88,15 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         config_entry = self.hass.config_entries.async_get_entry(self.config_entry_id)
 
         default_offpeak_hours = None
-        if config_entry.data['contract_type'] == CONTRACT_TYPE_TEMPO:
+        if config_entry.data[CONF_CONTRACT_TYPE] == CONTRACT_TYPE_TEMPO:
             default_offpeak_hours = TEMPO_OFFPEAK_HOURS
 
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
                 {
-                    vol.Optional("refresh_interval", default=config_entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL)): int,
-                    vol.Optional("off_peak_hours_ranges", default=config_entry.options.get("off_peak_hours_ranges", default_offpeak_hours)): str,
+                    vol.Optional(CONF_REFRESH_INTERVAL, default=config_entry.options.get(CONF_REFRESH_INTERVAL, DEFAULT_REFRESH_INTERVAL)): int,
+                    vol.Optional(CONF_OFF_PEAK_HOURS_RANGES, default=config_entry.options.get(CONF_OFF_PEAK_HOURS_RANGES, default_offpeak_hours)): str,
                 }
             ),
         )
