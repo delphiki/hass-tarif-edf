@@ -11,8 +11,8 @@
         "step": {
             "user": {
                 "data": {
-                    "contract_type": "Option",
-                    "power": "Power (kVA)"
+                    "contract_type": "Contract",
+                    "contract_power": "Power (kVA)"
                 }
             }
         }

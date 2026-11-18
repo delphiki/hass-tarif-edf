@@ -1,19 +1,22 @@
 """The Tarif EDF integration."""
+
 from __future__ import annotations
+
+from typing import TypedDict
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
-from datetime import timedelta
-
 from .coordinator import TarifEdfDataUpdateCoordinator
+from .const import DOMAIN, PLATFORMS
 
-from .const import (
-    DOMAIN,
-    PLATFORMS,
-    DEFAULT_REFRESH_INTERVAL
-)
+
+class TarifEdfEntryData(TypedDict):
+    """Typed storage for per-entry data."""
+
+    coordinator: TarifEdfDataUpdateCoordinator
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Tarif EDF from a config entry."""
@@ -26,9 +29,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if not coordinator.last_update_success:
         raise ConfigEntryNotReady
 
-    hass.data[DOMAIN][entry.entry_id] = {
-        "coordinator": coordinator,
-    }
+    hass.data[DOMAIN][entry.entry_id] = TarifEdfEntryData(coordinator=coordinator)
 
     entry.async_on_unload(entry.add_update_listener(update_listener))
 
@@ -44,8 +45,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     return unload_ok
 
-async def update_listener(hass: HomeAssistant, entry: ConfigEntry):
-    """Handle options update."""
-    hass.data[DOMAIN][entry.entry_id]['coordinator'].update_interval = timedelta(days=entry.options.get("refresh_interval", DEFAULT_REFRESH_INTERVAL))
 
-    return True
+async def update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Handle options update — reload the entry so the coordinator picks up new options."""
+    await hass.config_entries.async_reload(entry.entry_id)

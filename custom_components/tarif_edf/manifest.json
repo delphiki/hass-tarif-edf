@@ -5,6 +5,7 @@
     "@delphiki"
   ],
   "config_flow": true,
+  "integration_type": "service",
   "documentation": "https://github.com/delphiki/hass-tarif-edf",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/delphiki/hass-tarif-edf/issues",
