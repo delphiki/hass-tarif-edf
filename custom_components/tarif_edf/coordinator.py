@@ -29,6 +29,7 @@ from .const import (
     TEMPO_TOMRROW_AVAILABLE_AT,
     TEMPO_OFFPEAK_HOURS
 )
+from .tempo_cache import TempoDayCache
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -58,7 +59,6 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
     """Data update coordinator for the Tarif EDF integration."""
 
     config_entry: ConfigEntry
-    tempo_prices = []
 
     def __init__(
         self, hass: HomeAssistant, entry: ConfigEntry
@@ -71,23 +71,21 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
             update_interval=timedelta(minutes=1),
         )
         self.config_entry = entry
+        self.tempo_days = TempoDayCache(str_to_time(TEMPO_TOMRROW_AVAILABLE_AT))
 
     async def get_tempo_day(self, date):
         date_str = date.strftime('%Y-%m-%d')
-        now = datetime.now().time()
-        check_limit = str_to_time(TEMPO_TOMRROW_AVAILABLE_AT)
+        now = datetime.now()
 
-        for price in self.tempo_prices:
-            codeJour = price['codeJour']
-            if "dateJour" in price and price['dateJour'] == date_str and  \
-                (codeJour in [1,2,3] or (codeJour == 0 and now < check_limit)):
-                return price
+        cached = self.tempo_days.get(date, today=now.date(), now=now.time())
+        if cached is not None:
+            return cached
 
         url = f"{TEMPO_COLOR_API_URL}/{date_str}"
         response = await self.hass.async_add_executor_job(get_remote_file, url)
         response_json = response.json()
 
-        self.tempo_prices.append(response_json)
+        self.tempo_days.put(response_json, today=now.date())
 
         return response_json
 
