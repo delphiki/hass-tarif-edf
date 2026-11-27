@@ -54,11 +54,22 @@ def get_tempo_color_from_code(code):
     return TEMPO_COLORS_MAPPING[code]
 
 
+def tempo_day_is_usable(cached, day, now):
+    """Whether a cached API answer for `day` can be reused instead of calling the API again.
+
+    A known colour never changes. An unknown one (codeJour 0) is only expected for
+    tomorrow before the colour is published, so it is reused for tomorrow until
+    TEMPO_TOMRROW_AVAILABLE_AT; for today or yesterday it is asked again (#67).
+    """
+    if cached.get('codeJour') in [1, 2, 3]:
+        return True
+    return day > now.date() and now.time() < str_to_time(TEMPO_TOMRROW_AVAILABLE_AT)
+
+
 class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
     """Data update coordinator for the Tarif EDF integration."""
 
     config_entry: ConfigEntry
-    tempo_prices = []
 
     def __init__(
         self, hass: HomeAssistant, entry: ConfigEntry
@@ -71,23 +82,23 @@ class TarifEdfDataUpdateCoordinator(TimestampDataUpdateCoordinator):
             update_interval=timedelta(minutes=1),
         )
         self.config_entry = entry
+        # One API answer per date: a newer answer replaces the older one (#67).
+        self.tempo_prices: dict[str, dict] = {}
 
     async def get_tempo_day(self, date):
         date_str = date.strftime('%Y-%m-%d')
-        now = datetime.now().time()
-        check_limit = str_to_time(TEMPO_TOMRROW_AVAILABLE_AT)
-
-        for price in self.tempo_prices:
-            codeJour = price['codeJour']
-            if "dateJour" in price and price['dateJour'] == date_str and  \
-                (codeJour in [1,2,3] or (codeJour == 0 and now < check_limit)):
-                return price
+        cached = self.tempo_prices.get(date_str)
+        if cached is not None and tempo_day_is_usable(cached, date, datetime.now()):
+            return cached
 
         url = f"{TEMPO_COLOR_API_URL}/{date_str}"
         response = await self.hass.async_add_executor_job(get_remote_file, url)
         response_json = response.json()
 
-        self.tempo_prices.append(response_json)
+        self.tempo_prices[date_str] = response_json
+        oldest_kept = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+        for key in [key for key in self.tempo_prices if key < oldest_kept]:
+            del self.tempo_prices[key]
 
         return response_json
 
